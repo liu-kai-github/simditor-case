@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>网页富文本编辑器</title>
+    <link rel="stylesheet" type="text/css" href="./styles/simditor.css"/>
+    <link rel="stylesheet" type="text/css" href="./styles/app.css"/>
+    <link rel="stylesheet" type="text/css" href="./styles/mobile.css"/>
+    <style rel="stylesheet">
+        button {
+            background-color: #4CAF50;
+            color: #ffffff;
+            border-color: #4CAF50;
+            font-size: 17px;
+            display: inline-block;
+            padding: 8px 16px;
+            vertical-align: middle;
+            overflow: hidden;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;
+            margin: 20px 0 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<textarea id="editor" placeholder="Balabala" autofocus></textarea>
+
+<button>提交</button>
+
+<script type="text/javascript" src="./scripts/jquery.min.js"></script>
+<script type="text/javascript" src="./scripts/module.js"></script>
+<script type="text/javascript" src="./scripts/hotkeys.js"></script>
+<script type="text/javascript" src="./scripts/uploader.js"></script>
+<script type="text/javascript" src="./scripts/simditor.js"></script>
+
+<script>
+    // 初始化 Simditor
+    var editor = new Simditor({
+        textarea: $('#editor'),
+        //optional options
+        toolbar: [
+            'title',
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'fontScale',
+            'color',
+            'ol',             // ordered list
+            'ul',             // unordered list
+            'blockquote',
+            'code',           // code block
+            'table',
+            'link',
+            'image',
+            'hr',             // horizontal ruler
+            'indent',
+            'outdent',
+            'alignment'
+        ],
+        upload: {
+            url: '/upload',
+            params: null,
+            fileKey: 'upload_file',
+            connectionCount: 3,
+            leaveConfirm: 'Uploading is in progress, are you sure to leave this page?'
+        },
+        pasteImage: true,
+        // imageButton:
+    });
+
+    $('button').on('click', function () {
+        $.ajax({
+            type: "POST",
+            url: '/save',
+            data: editor.getValue(),
+            success: function () {
+                console.log('上传成功');
+            }
+        })
+    });
+</script>
+</body>
+</html>
